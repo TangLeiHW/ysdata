@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ml.tanglei.ysdata.dao.UserFileInfoDao" >
+
+    <sql id="BASE_COLUMN">
+        id,user_name,file_name,file_type,file_size,file_num,file_url,upload_date,create_time
+    </sql>
+
+    <select id="selectUserFileInfo" resultType="ml.tanglei.ysdata.model.UserFileInfo">
+        SELECT
+        <include refid="BASE_COLUMN"/>
+        FROM tb_ys_user_file_info
+        <where>
+            <if test="fileName != null and fileName != ''">
+                and file_name like concat('%',#{fileName},'%')
+            </if>
+            <if test="fileType != null and fileType != ''">
+                and file_type = concat('.',#{fileType})
+            </if>
+            <if test="startDate != null and startDate != ''">
+               and upload_date &gt;= #{startDate}
+            </if>
+            <if test="endDate != null and endDate != ''">
+                and upload_date &lt;= #{endDate}
+            </if>
+        </where>
+        GROUP BY file_name,file_num
+        order by upload_date desc
+    </select>
+    
+
+
+</mapper>
