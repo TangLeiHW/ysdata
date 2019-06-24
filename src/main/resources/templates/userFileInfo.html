@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>用户管理</title>
+    <title>用户文件管理</title>
     <link rel="stylesheet" href="//cdn.bootcss.com/element-ui/1.1.2/theme-default/index.css">
     <script src="//cdn.bootcss.com/vue/2.1.8/vue.min.js"></script>
     <script src="//cdn.bootcss.com/element-ui/1.1.2/index.js"></script>
@@ -10,84 +10,86 @@
 
 </head>
 <body>
-<div id="vm">
-
-    <el-form :inline="true" :model="formInline"  label-width="120px" class="demo-dynamic">
-        <el-form-item label="文件名">
-            <el-input v-model="formInline.fileName" placeholder="文件名"></el-input>
-        </el-form-item>
-        <el-form-item label="文件类型">
-            <el-select v-model="formInline.fileType" clearable placeholder="请选择">
-                <el-option
-                        v-for="item in options"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
-                </el-option>
-            </el-select>
-        </el-form-item>
-        <el-form-item label="上传时间">
-            <el-date-picker
-                    v-model="formInline.uploadDate"
-                    type="daterange"
-                    value-format=“yyyy-MM-dd”
-                    range-separator="至"
-                    start-placeholder="开始日期"
-                    end-placeholder="结束日期">
-            </el-date-picker>
-        </el-form-item>
-        <el-form-item>
-            <el-button type="primary" @click="search">查询</el-button>
-        </el-form-item>
-    </el-form>
-    <el-table
-            :data="tableData"
-            stripe
-            style="width: 100%"
-            height="600">
-        <el-table-column
-                prop="userName"
-                label="用户名"
-                width="180">
-        </el-table-column>
-        <el-table-column
-                prop="fileName"
-                label="文件名"
-                width="300">
-        </el-table-column>
-        <el-table-column
-                prop="fileType"
-                label="文件类型"
-                width="180">
-        </el-table-column>
-        <el-table-column
-                prop="fileSize"
-                label="文件大小"
-                width="180">
-        </el-table-column>
-        <el-table-column
-                prop="fileUrl"
-                label="url">
-        </el-table-column>
-        <el-table-column
-                prop="uploadDate"
-                label="上传时间"
-                width="180">
-        </el-table-column>
-    </el-table>
-    <div class="block">
-        <el-pagination
-                name="fenye"
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page.sync="currentPage"
-                :page-sizes="[15, 20, 50, 100]"
-                :page-size="pageSize"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total=total>
-        </el-pagination>
-    </div>
-
+<div id="vm" style="height: 100%">
+        <div style="padding-top: 22px;">
+            <el-form :inline="true" :model="formInline"  label-width="120px" class="demo-dynamic">
+                <el-form-item label="文件名">
+                    <el-input v-model="formInline.fileName" placeholder="文件名"></el-input>
+                </el-form-item>
+                <el-form-item label="文件类型">
+                    <el-select v-model="formInline.fileType" clearable placeholder="请选择">
+                        <el-option
+                                v-for="item in options"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="上传时间">
+                    <el-date-picker
+                            v-model="formInline.uploadDate"
+                            type="daterange"
+                            value-format=“yyyy-MM-dd”
+                            range-separator="至"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期">
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="search">查询</el-button>
+                </el-form-item>
+            </el-form>
+        </div>
+        <div style="margin-left: 10px;margin-right: 10px;">
+            <el-table
+                    :data="tableData"
+                    stripe
+                    v-loading="loading"
+                    style="width: 100%;"
+                    :height="tableHeight">
+                <el-table-column
+                        prop="userName"
+                        label="用户名"
+                        width="180">
+                </el-table-column>
+                <el-table-column
+                        prop="fileName"
+                        label="文件名"
+                        width="300">
+                </el-table-column>
+                <el-table-column
+                        prop="fileType"
+                        label="文件类型"
+                        width="180">
+                </el-table-column>
+                <el-table-column
+                        prop="fileSize"
+                        label="文件大小"
+                        width="180">
+                </el-table-column>
+                <el-table-column
+                        prop="fileUrl"
+                        label="url">
+                </el-table-column>
+                <el-table-column
+                        prop="uploadDate"
+                        label="上传时间"
+                        width="180">
+                </el-table-column>
+            </el-table>
+            <div align="center">
+                <el-pagination
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        :current-page.sync="currentPage"
+                        :page-sizes="[5, 10, 15, 20]"
+                        :page-size="pageSize"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :total=total>
+                </el-pagination>
+            </div>
+        </div>
 </div>
 
 <script>
@@ -95,9 +97,11 @@
     var vm = new Vue({
         el: '#vm',
         data: {
+            tableHeight: window.innerHeight * 0.8,
             tableData: [],
+            loading: false,
             currentPage: 1,
-            pageSize: 15,
+            pageSize: 10,
             total: 0,
             dialogFormVisible: false,
             user:{id:"",name:'',age:''},
@@ -157,6 +161,7 @@
                     .catch(function (response) { console.error(response); });
             },
             search:function(){
+                this.loading = true
                 this.$http.post("/userFileInfo/find",{pageSize: this.pageSize,pageNum: this.currentPage,
                     fileName:this.formInline.fileName,fileType:this.formInline.fileType,
                     startDate:this.formInline.uploadDate[0], endDate:this.formInline.uploadDate[1]})
@@ -166,8 +171,12 @@
                             this.tableData = response.body.data.list;
                             this.total = response.body.data.total;
                         }
+                        this.loading = false
                     })
-                    .catch(function (response) { console.error(response); });
+                    .catch(function (response) {
+                        console.error(response);
+                        this.loading = false});
+
             },
             //修改每页条数触发
             handleSizeChange: function(val) {
@@ -190,5 +199,12 @@
 
     })
 </script>
+<style>
+    html,body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+    }
+</style>
 </body>
 </html>

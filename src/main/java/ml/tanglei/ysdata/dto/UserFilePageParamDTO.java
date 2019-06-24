@@ -7,7 +7,7 @@ public class UserFilePageParamDTO {
 
     private int pageNum = 1;
 
-    private int pageSize = 15;
+    private int pageSize = 10;
 
     private String fileName;
 
