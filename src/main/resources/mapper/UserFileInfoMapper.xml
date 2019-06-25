@@ -10,7 +10,7 @@
         SELECT
         <include refid="BASE_COLUMN"/>
         FROM tb_ys_user_file_info
-        <where>
+        where file_url != ''
             <if test="fileName != null and fileName != ''">
                 and file_name like concat('%',#{fileName},'%')
             </if>
@@ -23,7 +23,6 @@
             <if test="endDate != null and endDate != ''">
                 and upload_date &lt;= #{endDate}
             </if>
-        </where>
         GROUP BY file_name,file_num
         order by upload_date desc
     </select>
