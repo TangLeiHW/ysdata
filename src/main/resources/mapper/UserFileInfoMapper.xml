@@ -26,6 +26,14 @@
         GROUP BY file_name,file_num
         order by upload_date desc
     </select>
+
+    <update id="insertUserFileInfo">
+        update tb_ys_user_file_info
+        <set>
+            file_url = #{fileUrl}
+        </set>
+        where user_name = #{userName} and file_name = #{fileName} and file_size = #{fileSize}
+    </update>
     
 
 

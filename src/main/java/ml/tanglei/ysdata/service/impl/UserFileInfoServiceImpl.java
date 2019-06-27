@@ -25,4 +25,9 @@ public class UserFileInfoServiceImpl implements UserFileInfoService {
         PageInfo<UserFileInfo> result = new PageInfo<>(userFileInfos);
         return result;
     }
+
+    @Override
+    public void insertUserFileInfo(UserFileInfo userFileInfo) {
+        userFileInfoDao.insertUserFileInfo(userFileInfo);
+    }
 }

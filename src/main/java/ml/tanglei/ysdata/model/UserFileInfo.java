@@ -1,11 +1,15 @@
 package ml.tanglei.ysdata.model;
 
 
+import lombok.Builder;
 import lombok.Data;
+import lombok.ToString;
 
 import java.util.Date;
 
 @Data
+@ToString
+@Builder
 public class UserFileInfo {
     /**
      * 主键

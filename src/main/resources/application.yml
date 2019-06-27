@@ -4,9 +4,9 @@ server:
 spring:
   datasource:
     name: test
-    url: jdbc:mysql://120.77.222.189:3306/ysdb?&useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
+    url: jdbc:mysql://49.4.114.49:3306/ysdb?&useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
     username: root
-    password: root
+    password: Aa000000!
     # druid 连接池
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -45,4 +45,8 @@ pagehelper:
   returnPageInfo: check
 
 mode: LEGACYHTML5
+
+logging:
+  level:
+    ml.tanglei.ysdata.dao: debug
 

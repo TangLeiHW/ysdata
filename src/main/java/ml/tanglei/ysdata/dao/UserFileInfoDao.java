@@ -8,4 +8,6 @@ import java.util.List;
 public interface UserFileInfoDao {
 
     List<UserFileInfo> selectUserFileInfo(UserFilePageParamDTO userFilePageParamDTO);
+
+    void insertUserFileInfo(UserFileInfo userFileInfo);
 }
